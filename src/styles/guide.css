@@ -1,0 +1,196 @@
+/* ============ the install walkthrough ============
+   A presenter surface, not product UI - it deliberately sits above the whole desktop so
+   it reads as "stepping outside the simulation to show how this really ships". */
+.guide {
+  position: absolute;
+  inset: 0;
+  z-index: 200;
+  display: grid;
+  place-items: center;
+  padding: var(--s6);
+  background: rgba(10, 8, 7, 0.74);
+  backdrop-filter: blur(14px) saturate(140%);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  animation: fade-in var(--t-base) var(--ease) both;
+}
+
+.guide__box {
+  width: min(1080px, 100%);
+  max-height: 100%;
+  display: flex;
+  flex-direction: column;
+  border-radius: 18px;
+  overflow: hidden;
+  background: var(--g900);
+  box-shadow: var(--e4), inset 0 0 0 1px var(--n-line);
+  animation: pop-in var(--t-slow) var(--ease-spring) both;
+}
+
+/* ---------- header ---------- */
+.guide__top {
+  flex: none;
+  display: flex;
+  align-items: flex-start;
+  gap: var(--s5);
+  padding: var(--s5) var(--s6);
+  border-bottom: 1px solid var(--n-line-soft);
+}
+.guide__eyebrow {
+  font-size: var(--f1);
+  font-weight: 680;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--clay);
+  margin-bottom: 5px;
+}
+.guide__top h2 { font-size: var(--f6); font-weight: 640; letter-spacing: -0.02em; }
+.guide__top-actions { margin-left: auto; display: flex; align-items: center; gap: var(--s3); }
+
+.guide__play {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 30px;
+  padding: 0 var(--s4);
+  border-radius: 999px;
+  font-size: var(--f2);
+  font-weight: 560;
+  color: var(--n-dim);
+  box-shadow: inset 0 0 0 1px var(--n-line);
+  transition: color var(--t-fast) var(--ease), background var(--t-fast) var(--ease);
+}
+.guide__play:hover { color: var(--n-text); background: var(--n-hover); }
+.guide__close { color: var(--n-dim-2); padding: 6px; border-radius: 8px; }
+.guide__close:hover { background: var(--n-hover); color: var(--n-text); }
+
+/* ---------- the two ways ---------- */
+.ways {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--s5);
+  padding: var(--s6);
+  overflow-y: auto;
+}
+
+.way {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s4);
+  padding: var(--s5);
+  border-radius: 14px;
+  background: var(--g950);
+  box-shadow: inset 0 0 0 1px var(--n-line-soft);
+  transition: box-shadow var(--t-slow) var(--ease), background var(--t-slow) var(--ease);
+}
+.way.is-done { box-shadow: inset 0 0 0 1px rgba(217, 119, 87, 0.34); }
+
+.way__head { display: flex; align-items: flex-start; gap: var(--s4); }
+.way__n {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  font-size: var(--f4);
+  font-weight: 620;
+  color: var(--g950);
+  background: var(--clay);
+}
+.way__head h3 { font-size: var(--f5); font-weight: 620; letter-spacing: -0.015em; }
+.way__where { margin-top: 3px; font-size: var(--f3); color: var(--n-dim-2); }
+.way__blurb { font-size: var(--f3); line-height: 1.6; color: var(--n-dim); }
+
+/* ---------- terminal ---------- */
+.term {
+  margin-top: auto;
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--g900);
+  box-shadow: inset 0 0 0 1px var(--n-line);
+}
+.term__name {
+  padding: var(--s3) var(--s4);
+  font-family: var(--mono);
+  font-size: var(--f2);
+  color: var(--n-dim-2);
+  border-bottom: 1px solid var(--n-line-soft);
+  background: rgba(250, 249, 245, 0.03);
+}
+.term__body { padding: var(--s4); display: flex; flex-direction: column; gap: var(--s3); }
+
+.cmd { opacity: 0.28; transition: opacity var(--t-base) var(--ease); }
+.cmd.is-on { opacity: 1; }
+.cmd code {
+  display: block;
+  font-family: var(--mono);
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: var(--n-text);
+  word-break: break-all;
+}
+.cmd__mark { color: var(--clay); margin-right: 8px; }
+.cmd__note {
+  display: inline-block;
+  margin-top: 5px;
+  font-size: var(--f2);
+  color: var(--n-dim-2);
+  animation: fade-in var(--t-base) var(--ease) both;
+}
+
+.caret {
+  display: inline-block;
+  width: 8px;
+  height: 1.05em;
+  margin-left: 2px;
+  vertical-align: text-bottom;
+  background: var(--clay);
+  animation: blink 900ms steps(2, start) infinite;
+}
+@keyframes blink { 50% { opacity: 0; } }
+
+.term__done {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: var(--s3) var(--s4);
+  font-size: var(--f2);
+  font-weight: 560;
+  color: var(--clay);
+  background: rgba(217, 119, 87, 0.12);
+  border-top: 1px solid rgba(217, 119, 87, 0.24);
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity var(--t-base) var(--ease), transform var(--t-base) var(--ease);
+}
+.term__done.is-on { opacity: 1; transform: none; }
+
+/* ---------- the sentence that matters to a non-technical room ---------- */
+.guide__foot {
+  flex: none;
+  padding: var(--s5) var(--s6) var(--s6);
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity var(--t-slow) var(--ease), transform var(--t-slow) var(--ease);
+}
+.guide__foot.is-on { opacity: 1; transform: none; }
+.guide__foot p {
+  padding: var(--s4) var(--s5);
+  border-radius: 12px;
+  font-size: var(--f5);
+  line-height: 1.55;
+  color: var(--n-text);
+  background: rgba(217, 119, 87, 0.13);
+  box-shadow: inset 0 0 0 1px rgba(217, 119, 87, 0.3);
+}
+
+@media (max-width: 900px) {
+  .ways { grid-template-columns: 1fr; }
+}
+
+/* one command, not two ways - the install should look as short as it is */
+.guide__box--simple { width: min(560px, 100%); }
+.ways--one { grid-template-columns: 1fr; padding-bottom: 0; }
+.ways--one .term { margin-top: 0; }
+.ways--one .cmd code { font-size: 18px; }

@@ -1,0 +1,196 @@
+*,
+*::before,
+*::after { box-sizing: border-box; }
+html, body, #root { height: 100%; }
+body { margin: 0; }
+button, input, select { font: inherit; color: inherit; }
+button { background: none; border: 0; cursor: pointer; }
+h1, h2, h3, h4, p, dl, dd, dt, ul, li, fieldset, legend { margin: 0; padding: 0; }
+ul { list-style: none; }
+fieldset { border: 0; }
+
+:root {
+  /* ============================================================
+     CLAUDE BRAND PALETTE
+     Source: Anthropic design tokens, claude.com (--color-*).
+     Raw palette only - never used directly by components.
+     Everything below maps onto these.
+     ============================================================ */
+
+  /* clay - the Claude accent */
+  --clay:        #d97757;
+  --clay-hover:  #c6613f;
+  --clay-dark:   #c46849;
+
+  /* warm gray ramp - Claude's neutrals are warm, not blue */
+  --g000: #ffffff;  --g050: #faf9f5;  --g100: #f5f4ed;  --g150: #f0eee6;
+  --g200: #e8e6dc;  --g250: #dedcd1;  --g300: #d1cfc5;  --g350: #c2c0b6;
+  --g400: #b0aea5;  --g450: #9c9a92;  --g500: #87867f;  --g550: #73726c;
+  --g600: #5e5d59;  --g650: #4d4c48;  --g700: #3d3d3a;  --g750: #30302e;
+  --g800: #262624;  --g850: #1f1e1d;  --g900: #1a1918;  --g950: #141413;
+
+  /* secondary brand hues */
+  --sky:    #6a9bcc;
+  --olive:  #788c5d;
+  --cactus: #bcd1ca;
+  --oat:    #e3dacc;
+  --fig:    #c46686;
+  --error:  #bf4d43;
+
+  /* ---- type ---- */
+  --sans: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', Inter, system-ui, sans-serif;
+  --mono: ui-monospace, 'SF Mono', SFMono-Regular, 'JetBrains Mono', Menlo, monospace;
+
+  /* ---- type scale: seven steps, no in-between guesses ---- */
+  --f1: 10.5px;   /* micro labels, uppercase eyebrows */
+  --f2: 11.5px;   /* caption, helper text */
+  --f3: 13px;     /* labels, dense body */
+  --f4: 14px;     /* body */
+  --f5: 16px;
+  --f6: 20px;     /* dialog title */
+  --f7: 26px;
+
+  /* ---- spacing: 4/8 rhythm ---- */
+  --s1: 4px;  --s2: 6px;  --s3: 8px;  --s4: 12px;
+  --s5: 16px; --s6: 20px; --s7: 28px; --s8: 36px;
+
+  /* ---- motion: one rhythm everywhere ---- */
+  --t-fast: 140ms;
+  --t-base: 220ms;
+  --t-slow: 320ms;
+  --ease: cubic-bezier(0.32, 0.72, 0, 1);
+  --ease-spring: cubic-bezier(0.34, 1.4, 0.5, 1);
+
+  /* ---- elevation scale ---- */
+  --e1: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --e2: 0 6px 18px -8px rgba(0, 0, 0, 0.7);
+  --e3: 0 18px 40px -14px rgba(0, 0, 0, 0.75);
+  --e4: 0 40px 90px -20px rgba(0, 0, 0, 0.85);
+  --shadow-win: 0 42px 90px -20px rgba(0, 0, 0, 0.62), 0 8px 22px rgba(0, 0, 0, 0.34);
+
+  /* ============================================================
+     SEMANTIC LAYER - the app only ever speaks in these
+     ============================================================ */
+
+  /* ---- dark surfaces (the plan panel) ---- */
+  /* the colour lines and faint fills are made of, and the strongest text - both flip in light mode */
+  --ink: 250, 249, 245;
+  --strong: #ffffff;
+
+  --n-bg: var(--g850);
+  --n-node: var(--g750);
+  --n-inset: var(--g800);
+  --n-hover: rgba(var(--ink), 0.06);
+  --n-line: rgba(var(--ink), 0.13);
+  --n-line-soft: rgba(var(--ink), 0.07);
+  --n-text: var(--g050);
+  --n-dim: var(--g400);
+  --n-dim-2: var(--g450);
+
+  /* ---- semantic colour, dark-tuned off the brand hues ----
+     Each is the brand hue lifted in lightness until it clears
+     4.5:1 on --n-bg; tints and lines stay at the source hue. */
+  --d-blue: #8fb8dc;   --d-blue-tint: rgba(106, 155, 204, 0.16);  --d-blue-line: rgba(143, 184, 220, 0.34);
+  --d-red: #e6786f;    --d-red-tint: rgba(191, 77, 67, 0.18);     --d-red-line: rgba(230, 120, 111, 0.34);
+  --d-amber: #e2a663;  --d-amber-tint: rgba(196, 137, 64, 0.16);  --d-amber-line: rgba(226, 166, 99, 0.32);
+  --d-ok: #e0977a;    --d-ok-tint: rgba(217, 119, 87, 0.18);     --d-ok-line: rgba(224, 151, 122, 0.34);
+  --d-sacred: #f65f48; --d-sacred-tint: rgba(191, 61, 45, 0.22);
+
+  /* solid fills that carry white text */
+  --d-red-solid: #c04a3c;
+  --d-amber-solid: #956a32;
+  --d-ok-solid: #b0563f;
+
+  /* text that sits ON a solid semantic fill */
+  --on-red: #3a1410;
+  --on-ok: #2e1409;
+  --on-amber: #2b2113;
+
+  /* the plan panel's mark - Claude's own clay */
+  --mark: #e08a68;
+  --mark-deep: var(--clay-hover);
+
+  --accent: var(--clay);
+  --accent-hover: var(--clay-hover);
+  --r-sm: 7px; --r-md: 11px; --r-lg: 15px; --r-xl: 20px;
+}
+
+body {
+  font-family: var(--sans);
+  font-size: var(--f4);
+  -webkit-font-smoothing: antialiased;
+  color: var(--n-text);
+  overflow: hidden;
+}
+
+::selection { background: rgba(217, 119, 87, 0.28); }
+
+/* a focus ring that survives on any surface */
+:focus-visible {
+  outline: 2px solid var(--clay);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+:focus:not(:focus-visible) { outline: none; }
+
+/* ---------- buttons ---------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--s2);
+  min-height: 38px;
+  padding: 0 var(--s5);
+  border-radius: 9px;
+  font-size: var(--f3);
+  font-weight: 590;
+  letter-spacing: -0.005em;
+  transition: transform var(--t-fast) var(--ease), background var(--t-fast), box-shadow var(--t-fast), opacity var(--t-fast);
+}
+.btn:active { transform: scale(0.978); }
+.btn--sm { min-height: 32px; padding: 0 var(--s4); font-size: var(--f2); border-radius: 7px; }
+
+.btn--primary {
+  background: var(--clay-hover);
+  color: var(--g000);
+  box-shadow: var(--e1), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+.btn--primary:hover { background: #b85838; }
+.btn--primary:disabled { opacity: 0.42; cursor: not-allowed; transform: none; }
+
+.btn--danger {
+  background: var(--d-red-tint);
+  color: var(--d-red);
+  box-shadow: inset 0 0 0 1px var(--d-red-line);
+}
+.btn--danger:hover { background: rgba(191, 77, 67, 0.3); }
+.btn--danger:disabled { opacity: 0.42; cursor: not-allowed; transform: none; }
+
+.btn--ghost { color: var(--n-dim); box-shadow: inset 0 0 0 1px var(--n-line); }
+.btn--ghost:hover { background: var(--n-hover); color: var(--n-text); }
+
+/* ---------- spinner ---------- */
+.spinner {
+  width: 11px; height: 11px;
+  border-radius: 50%;
+  border: 1.6px solid currentColor;
+  border-top-color: transparent;
+  animation: spin 640ms linear infinite;
+  display: inline-block;
+}
+.spinner--sm { width: 10px; height: 10px; border-width: 1.4px; }
+
+/* ---------- shared motion ---------- */
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes msg-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+@keyframes pop-in { from { opacity: 0; transform: translateY(14px) scale(0.97); } to { opacity: 1; transform: none; } }
+@keyframes slide-l { from { opacity: 0; transform: translateX(18px); } to { opacity: 1; transform: none; } }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}

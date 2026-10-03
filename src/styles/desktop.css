@@ -1,0 +1,869 @@
+.desk {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* dusk-over-the-city wallpaper, built from gradients only */
+.desk__wall {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(118% 74% at 66% 3%, #f2c795 0%, var(--clay) 14%, #b0563f 32%, #6d3a2e 52%, #3a2724 72%, #191615 100%),
+    linear-gradient(var(--g950), var(--g950));
+}
+.desk__wall::after {
+  /* skyline silhouette */
+  content: '';
+  position: absolute;
+  inset: 42% 0 0 0;
+  background:
+    linear-gradient(180deg, rgba(15, 13, 12, 0) 0%, rgba(15, 13, 12, 0.72) 42%, #100e0d 100%),
+    repeating-linear-gradient(90deg, rgba(13, 11, 10, 0.92) 0 34px, rgba(20, 17, 16, 0.86) 34px 41px, rgba(13, 11, 10, 0.92) 41px 88px, transparent 88px 96px);
+  -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 26%, #000 100%);
+  mask-image: linear-gradient(180deg, transparent 0%, #000 26%, #000 100%);
+}
+.desk__glow {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(60% 40% at 50% 42%, rgba(240, 200, 165, 0.11), transparent 70%),
+    radial-gradient(140% 100% at 50% 50%, transparent 42%, rgba(0, 0, 0, 0.46) 100%);
+  pointer-events: none;
+}
+
+/* ---------- menu bar ---------- */
+.menubar {
+  position: relative;
+  z-index: 5;
+  height: 26px;
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 0 12px;
+  font-size: 12.5px;
+  color: rgba(255, 255, 255, 0.9);
+  background: rgba(22, 18, 16, 0.36);
+  backdrop-filter: saturate(180%) blur(22px);
+  -webkit-backdrop-filter: saturate(180%) blur(22px);
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.25);
+}
+.menubar strong { font-weight: 640; }
+.menubar__logo { font-size: 14px; margin-right: -4px; }
+.menubar__spacer { flex: 1; }
+.menubar__item { display: inline-flex; align-items: center; gap: 5px; opacity: 0.9; }
+.menubar__clock { font-variant-numeric: tabular-nums; }
+.menubar svg { opacity: 0.9; }
+
+/* ---------- widgets ---------- */
+.widgets {
+  position: absolute;
+  left: 26px;
+  top: 58px;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 168px;
+}
+.widget {
+  border-radius: var(--r-xl);
+  background: rgba(30, 25, 22, 0.44);
+  backdrop-filter: blur(26px) saturate(160%);
+  -webkit-backdrop-filter: blur(26px) saturate(160%);
+  box-shadow: inset 0 0 0 0.5px rgba(255, 255, 255, 0.16), 0 12px 30px rgba(0, 0, 0, 0.3);
+  color: #fff;
+  padding: 14px;
+}
+.widget--batt { height: 96px; display: flex; flex-direction: column; justify-content: space-between; }
+.widget__ring {
+  width: 32px; height: 32px; border-radius: 9px;
+  background: conic-gradient(var(--clay) 0 25%, rgba(255,255,255,0.22) 25% 100%);
+  box-shadow: inset 0 0 0 6px rgba(32, 27, 24, 0.9);
+}
+.widget__pct { font-size: 30px; font-weight: 300; letter-spacing: -0.02em; }
+.widget--cal { display: grid; grid-template-columns: auto 1fr; gap: 2px 10px; align-items: baseline; }
+.widget__day { grid-column: 1; font-size: 10.5px; font-weight: 700; letter-spacing: 0.06em; color: var(--clay); }
+.widget__date { grid-column: 1; grid-row: 2; font-size: 30px; font-weight: 300; line-height: 1; }
+.widget__note { grid-column: 2; font-size: 11px; opacity: 0.92; }
+.widget__note--dim { opacity: 0.55; }
+
+/* ---------- window stage ---------- */
+.stage {
+  position: relative;
+  z-index: 2;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 26px;
+  padding: 22px 30px 92px;
+  transition: padding var(--t-slow) var(--ease);
+}
+.stage.is-open { padding: 22px 24px 92px; }
+
+.win {
+  height: min(760px, 100%);
+  border-radius: 13px;
+  box-shadow: var(--shadow-win);
+  overflow: hidden;
+  position: relative;
+}
+.win--cc {
+  /* the two windows share the stage rather than each claiming a slice of the
+     viewport - the sidebar made fixed vw widths overflow */
+  flex: 0 1 620px;
+  min-width: 380px;
+  background: var(--g900);
+  box-shadow: var(--shadow-win), inset 0 0 0 0.5px rgba(255, 255, 255, 0.11);
+}
+.win--panel {
+  flex: 1 1 780px;
+  min-width: 480px;
+  background: var(--n-bg);
+  box-shadow: var(--shadow-win), inset 0 0 0 0.5px rgba(255, 255, 255, 0.1);
+  animation: panel-in var(--t-slow) var(--ease) both;
+}
+@keyframes panel-in {
+  from { opacity: 0; transform: translateX(26px) scale(0.985); }
+  to { opacity: 1; transform: none; }
+}
+
+/* ---------- dock ---------- */
+.dock {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 4;
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 22px;
+  background: rgba(32, 27, 24, 0.42);
+  backdrop-filter: blur(30px) saturate(180%);
+  -webkit-backdrop-filter: blur(30px) saturate(180%);
+  box-shadow: inset 0 0 0 0.5px rgba(255, 255, 255, 0.18), 0 16px 38px rgba(0, 0, 0, 0.42);
+}
+
+.dock__app {
+  position: relative;
+  width: 44px; height: 44px;
+  flex: none;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28), 0 4px 10px rgba(0, 0, 0, 0.34);
+  transition: transform var(--t-base) var(--ease-spring), box-shadow var(--t-fast) var(--ease);
+  cursor: pointer;
+}
+.dock__app:hover {
+  transform: translateY(-9px) scale(1.09);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.32), 0 12px 22px rgba(0, 0, 0, 0.45);
+}
+/* the neighbours lift a little too, the way the real dock does */
+.dock__app:hover + .dock__app,
+.dock__app:has(+ .dock__app:hover) { transform: translateY(-4px) scale(1.03); }
+.dock__app:active { transform: translateY(-3px) scale(1.02); transition-duration: var(--t-fast); }
+
+.dock__app--claude { background: linear-gradient(180deg, #e08a68, var(--clay-hover)); }
+
+/* the running dot under an open app */
+.dock__run {
+  position: absolute;
+  bottom: -5px; left: 50%;
+  transform: translateX(-50%);
+  width: 4px; height: 4px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.85);
+}
+
+/* name on hover, the way macOS labels dock items */
+.dock__app::after {
+  content: attr(data-label);
+  position: absolute;
+  bottom: calc(100% + 12px);
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  padding: 4px 9px;
+  border-radius: 7px;
+  font-size: 11.5px;
+  white-space: nowrap;
+  color: var(--g050);
+  background: rgba(32, 27, 24, 0.92);
+  box-shadow: inset 0 0 0 0.5px rgba(255, 255, 255, 0.16), 0 6px 16px rgba(0, 0, 0, 0.4);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--t-fast) var(--ease), transform var(--t-fast) var(--ease);
+}
+.dock__app:hover::after { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+.dock__sep {
+  width: 1px;
+  height: 34px;
+  margin: 0 2px 5px;
+  flex: none;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+@media (max-width: 1180px) {
+  .stage { padding-left: 30px; }
+  .widgets { display: none; }
+  .win--cc { flex-basis: 460px; min-width: 320px; }
+  .win--panel { min-width: 400px; }
+}
+
+/* ==========================================================================
+   Simulated macOS Finder Window
+   ========================================================================== */
+
+.finder-backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  display: grid;
+  place-items: center;
+  background: rgba(10, 8, 7, 0.45);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  animation: finder-fade 180ms ease both;
+}
+
+@keyframes finder-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.win--finder {
+  width: min(740px, 92vw);
+  height: min(500px, 80vh);
+  background: rgba(32, 28, 26, 0.88);
+  backdrop-filter: blur(40px) saturate(190%);
+  -webkit-backdrop-filter: blur(40px) saturate(190%);
+  border-radius: 12px;
+  box-shadow:
+    0 32px 70px rgba(0, 0, 0, 0.65),
+    0 10px 24px rgba(0, 0, 0, 0.35),
+    inset 0 0 0 0.5px rgba(255, 255, 255, 0.18),
+    0 0 0 0.5px rgba(0, 0, 0, 0.7);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: finder-pop 200ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  color: #fff;
+}
+
+@keyframes finder-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Finder Header & Toolbar */
+.finder__header {
+  height: 50px;
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(45, 38, 35, 0.6);
+  user-select: none;
+}
+
+.finder__traffic-lights {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-right: 4px;
+}
+
+.finder__traffic-lights .light {
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+}
+
+.finder__nav-group {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 6px;
+  padding: 2px;
+}
+
+.finder__nav-btn {
+  width: 24px;
+  height: 22px;
+  display: grid;
+  place-items: center;
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.35);
+  font-size: 16px;
+  font-weight: 300;
+  line-height: 1;
+  border-radius: 4px;
+  cursor: default;
+}
+
+.finder__path-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.finder__path-icon {
+  color: #5cc8ff;
+}
+
+.finder__path-arrow {
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.45);
+  margin-left: 2px;
+}
+
+.finder__toolbar-spacer {
+  flex: 1;
+}
+
+.finder__segmented {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  background: rgba(0, 0, 0, 0.28);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  padding: 2px;
+}
+
+.finder__seg-btn {
+  width: 26px;
+  height: 22px;
+  display: grid;
+  place-items: center;
+  background: none;
+  border: none;
+  border-radius: 4px;
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 13px;
+  cursor: pointer;
+  transition: all var(--t-fast);
+}
+
+.finder__seg-btn:hover {
+  color: #fff;
+}
+
+.finder__seg-btn.is-active {
+  background: rgba(255, 255, 255, 0.18);
+  color: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.finder__search {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 140px;
+  height: 26px;
+  padding: 0 8px;
+  background: rgba(0, 0, 0, 0.32);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  transition: border-color var(--t-fast);
+}
+
+.finder__search:focus-within {
+  border-color: #007aff;
+  box-shadow: 0 0 0 2px rgba(0, 122, 255, 0.3);
+}
+
+.finder__search-icon {
+  color: rgba(255, 255, 255, 0.45);
+  flex: none;
+}
+
+.finder__search input {
+  width: 100%;
+  background: none;
+  border: none;
+  outline: none;
+  color: #fff;
+  font-size: 12px;
+}
+
+.finder__search input::placeholder {
+  color: rgba(255, 255, 255, 0.35);
+}
+
+.finder__search-clear {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.45);
+  cursor: pointer;
+  padding: 0;
+  display: grid;
+  place-items: center;
+}
+
+/* Finder Body (Sidebar + Main) */
+.finder__body {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+}
+
+.finder__sidebar {
+  width: 175px;
+  flex: none;
+  background: rgba(26, 22, 21, 0.65);
+  border-right: 1px solid rgba(255, 255, 255, 0.07);
+  padding: 12px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  overflow-y: auto;
+  user-select: none;
+}
+
+.finder__sb-group {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5px;
+}
+
+.finder__sb-title {
+  font-size: 10px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.38);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 4px 8px 2px;
+}
+
+.finder__sb-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 8px;
+  border-radius: 6px;
+  border: none;
+  background: none;
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 12px;
+  cursor: pointer;
+  text-align: left;
+  transition: background var(--t-fast);
+  width: 100%;
+}
+
+.finder__sb-item:hover {
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.finder__sb-item.is-active {
+  background: #007aff;
+  color: #fff;
+  font-weight: 600;
+  box-shadow: 0 1px 4px rgba(0, 122, 255, 0.4);
+}
+
+.finder__sb-icon {
+  font-size: 13px;
+  display: grid;
+  place-items: center;
+  flex: none;
+}
+
+.finder__sb-label {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.finder__sb-tag {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  flex: none;
+}
+
+.finder__sb-tag--blue { background: #007aff; box-shadow: 0 0 6px rgba(0, 122, 255, 0.6); }
+.finder__sb-tag--red { background: #ff3b30; box-shadow: 0 0 6px rgba(255, 59, 48, 0.6); }
+.finder__sb-tag--green { background: #34c759; box-shadow: 0 0 6px rgba(52, 199, 89, 0.6); }
+
+/* Finder Main Pane */
+.finder__main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  background: rgba(18, 15, 14, 0.72);
+}
+
+.finder__subhead {
+  height: 32px;
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  font-size: 11.5px;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.finder__crumb {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.finder__crumb-sep {
+  opacity: 0.4;
+}
+
+.finder__crumb-active {
+  color: #fff;
+}
+
+.finder__instruction {
+  font-size: 10.5px;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+/* Grid View */
+.finder__grid {
+  flex: 1;
+  padding: 16px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(115px, 1fr));
+  gap: 14px;
+  align-content: flex-start;
+  overflow-y: auto;
+}
+
+.finder__folder-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 10px 8px 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  user-select: none;
+  border: 1px solid transparent;
+  transition: all var(--t-fast);
+}
+
+.finder__folder-item:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.finder__folder-item.is-selected {
+  background: rgba(0, 122, 255, 0.18);
+  border-color: rgba(0, 122, 255, 0.6);
+  box-shadow: 0 0 12px rgba(0, 122, 255, 0.25);
+}
+
+.finder__folder-icon-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 6px;
+  transition: transform var(--t-fast);
+}
+
+.finder__folder-item:hover .finder__folder-icon-wrap {
+  transform: translateY(-2px);
+}
+
+.finder__folder-icon-wrap--add {
+  width: 64px;
+  height: 52px;
+  border-radius: 10px;
+  border: 2px dashed rgba(255, 255, 255, 0.25);
+  color: rgba(255, 255, 255, 0.6);
+  display: grid;
+  place-items: center;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.finder__folder-name {
+  font-size: 11.5px;
+  font-weight: 550;
+  color: #fff;
+  line-height: 1.25;
+  word-break: break-word;
+  max-width: 100%;
+}
+
+.finder__folder-item.is-selected .finder__folder-name {
+  background: #007aff;
+  color: #fff;
+  padding: 1px 6px;
+  border-radius: 4px;
+}
+
+.finder__folder-tag {
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.45);
+  margin-top: 3px;
+}
+
+.finder__folder-inline-input {
+  width: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  border: 1px solid #007aff;
+  border-radius: 4px;
+  padding: 2px 4px;
+  font-size: 11px;
+  color: #fff;
+  text-align: center;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(0, 122, 255, 0.4);
+}
+
+/* List View */
+.finder__list {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  font-size: 12px;
+}
+
+.finder__list-head {
+  display: grid;
+  grid-template-columns: 2.2fr 1.2fr 1fr 1.2fr;
+  padding: 6px 14px;
+  background: rgba(255, 255, 255, 0.03);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.finder__list-body {
+  display: flex;
+  flex-direction: column;
+}
+
+.finder__list-row {
+  display: grid;
+  grid-template-columns: 2.2fr 1.2fr 1fr 1.2fr;
+  align-items: center;
+  padding: 7px 14px;
+  cursor: pointer;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+  transition: background var(--t-fast);
+}
+
+.finder__list-row:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.finder__list-row.is-selected {
+  background: #007aff;
+  color: #fff;
+}
+
+.finder__list-row.is-selected .finder__badge-pill {
+  background: rgba(255, 255, 255, 0.25);
+  color: #fff;
+}
+
+.finder__col-name {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.finder__row-icon {
+  font-size: 14px;
+}
+
+.finder__badge-pill {
+  font-size: 10px;
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.finder__col-files,
+.finder__col-date {
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 11px;
+}
+
+.finder__list-row.is-selected .finder__col-files,
+.finder__list-row.is-selected .finder__col-date {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* Inspector Bottom Strip */
+.finder__inspector {
+  height: 34px;
+  flex: none;
+  background: rgba(0, 0, 0, 0.25);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  font-size: 11.5px;
+}
+
+.finder__inspector-left {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.finder__inspector-icon {
+  color: #5cc8ff;
+  flex: none;
+}
+
+.finder__inspector-desc {
+  color: rgba(255, 255, 255, 0.5);
+  margin-left: 6px;
+  font-size: 11px;
+}
+
+.finder__inspector-files {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex: none;
+}
+
+.finder__file-chip {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.65);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+  padding: 1px 5px;
+}
+
+.finder__file-chip--more {
+  color: #5cc8ff;
+}
+
+/* Footer / Action Bar */
+.finder__footer {
+  height: 52px;
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(36, 31, 29, 0.78);
+}
+
+.finder__footer-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.finder__btn-new-folder {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 11px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 12px;
+  cursor: pointer;
+  transition: all var(--t-fast);
+}
+
+.finder__btn-new-folder:hover {
+  background: rgba(255, 255, 255, 0.14);
+  color: #fff;
+}
+
+.finder__footer-status {
+  font-size: 11.5px;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.finder__footer-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.finder__btn {
+  padding: 6px 16px;
+  border-radius: 6px;
+  font-size: 12.5px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--t-fast);
+  border: none;
+}
+
+.finder__btn--secondary {
+  background: rgba(255, 255, 255, 0.09);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.88);
+}
+
+.finder__btn--secondary:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+}
+
+.finder__btn--primary {
+  background: #007aff;
+  color: #fff;
+  font-weight: 600;
+  box-shadow: 0 1px 3px rgba(0, 122, 255, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.finder__btn--primary:hover {
+  background: #006ee6;
+}
+
+.finder__btn--primary:active {
+  background: #005bb5;
+}
+
+
+/* before a plan opens the Claude window has the stage to itself - give the home screen room
+   so the abilities tiles each fit on one line */
+.stage:not(.is-open) .win--cc { flex-basis: 780px; }

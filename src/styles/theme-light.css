@@ -1,0 +1,60 @@
+/* Light mode for the Claude Code windows (the chat and the plan).
+   The grey scale flips, lines and faint fills switch from light ink to dark ink, and the
+   signal colours get darker shades so they stay readable on a light background. */
+.stage[data-theme='light'] {
+  --g000: #141413; --g050: #1a1918; --g100: #1f1e1d; --g150: #262624;
+  --g200: #30302e; --g250: #3d3d3a; --g300: #4d4c48; --g350: #5e5d59;
+  --g400: #5e5d59; --g450: #73726c; --g500: #87867f; --g550: #9c9a92;
+  --g600: #b0aea5; --g650: #c2c0b6; --g700: #d1cfc5; --g750: #e8e6dc;
+  --g800: #f0eee6; --g850: #f5f4ed; --g900: #faf9f5; --g950: #ffffff;
+
+  --ink: 20, 20, 19;
+  --strong: #141413;
+
+  --n-bg: #f0eee6;
+  --n-node: #ffffff;
+  --n-inset: #f5f4ed;
+  --n-hover: rgba(20, 20, 19, 0.05);
+  --n-line: rgba(20, 20, 19, 0.14);
+  --n-line-soft: rgba(20, 20, 19, 0.08);
+  --n-text: #1a1918;
+  --n-dim: #5e5d59;
+  --n-dim-2: #73726c;
+
+  --d-blue: #2f6ea6;   --d-blue-tint: rgba(47, 110, 166, 0.1);   --d-blue-line: rgba(47, 110, 166, 0.35);
+  --d-red: #b3402f;    --d-red-tint: rgba(191, 77, 67, 0.09);    --d-red-line: rgba(179, 64, 47, 0.4);
+  --d-amber: #8f5d1c;  --d-amber-tint: rgba(196, 137, 64, 0.13); --d-amber-line: rgba(143, 93, 28, 0.35);
+  --d-ok: #a4502f;     --d-ok-tint: rgba(217, 119, 87, 0.11);    --d-ok-line: rgba(164, 80, 47, 0.35);
+  --d-sacred: #c0392b; --d-sacred-tint: rgba(191, 61, 45, 0.1);
+}
+
+/* surfaces that were a fixed dark shade */
+.stage[data-theme='light'] .sb { background: #f0eee6; }
+.stage[data-theme='light'] .win--cc { background: #faf9f5; }
+
+/* text colours that were tuned for a dark background */
+.stage[data-theme='light'] .ev__caption,
+.stage[data-theme='light'] .msg--ai.is-warn p { color: #a4502f; }
+.stage[data-theme='light'] .msg--ai.is-good p { color: #4f6b35; }
+.stage[data-theme='light'] .card__assumed b,
+.stage[data-theme='light'] .explain__row.is-assumed dd { color: #1f4f7a; }
+.stage[data-theme='light'] .card__assumed.is-yours b { color: #7a3a22; }
+.stage[data-theme='light'] .card__assumed.is-note span { color: #6b4515; }
+.stage[data-theme='light'] .explain__row.is-risky.is-easy dd,
+.stage[data-theme='light'] .abil__tile.is-can .abil__icon,
+.stage[data-theme='light'] .phone__name svg { color: #4f6b35; }
+
+/* the page pictures keep their own light "screen" colours; give them an edge on a light card */
+.stage[data-theme='light'] .screen__view,
+.stage[data-theme='light'] .variant__phone { box-shadow: 0 0 0 1.5px #c2c0b6; }
+.stage[data-theme='light'] .screen .screen__view { box-shadow: 0 0 0 1.5px var(--d-amber); }
+.stage[data-theme='light'] .screen.is-asked .screen__view { box-shadow: 0 0 0 2px var(--clay), 0 0 0 5px rgba(217, 119, 87, 0.2); }
+
+/* bars that sat on a fixed dark glass */
+.stage[data-theme='light'] .panel__head { background: rgba(250, 249, 245, 0.94); }
+.stage[data-theme='light'] .tools { background: rgba(255, 255, 255, 0.9); }
+.stage[data-theme='light'] .bar { background: rgba(250, 249, 245, 0.96); }
+
+/* labels on a solid colour read white on a light page */
+.stage[data-theme='light'] .pill--good,
+.stage[data-theme='light'] .pill--bad { color: #ffffff; }
